@@ -7,13 +7,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "InnoClinic.WebAPI", "InnoCl
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "InnoClinic.IdentityAPI", "InnoClinic.IdentityAPI", "{FFF5A561-9A82-432D-B7D8-279D2229985B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InnoClinic.Presentation.WebAPI", "InnoClinic.Presentation.WebAPI\InnoClinic.Presentation.WebAPI.csproj", "{358F3835-26C6-4116-A4C5-0F4CD93359E8}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InnoClinic.Core.Application", "InnoClinic.Core.Application\InnoClinic.Core.Application.csproj", "{90E479F8-DC9E-4F00-A93B-03CC22EC5F28}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InnoClinic.Core.Domain", "InnoClinic.Core.Domain\InnoClinic.Core.Domain.csproj", "{9C42FB24-88C2-40D5-B73C-91272D48D57A}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InnoClinic.Infrastructure.Identity", "InnoClinic.Infrastructure.Identity\InnoClinic.Infrastructure.Identity.csproj", "{D81768B4-197B-4A05-95E9-0475EDCC46B6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InnoClinic.Presentation.WebAPI", "InnoClinic.Presentation.WebAPI\InnoClinic.Presentation.WebAPI.csproj", "{358F3835-26C6-4116-A4C5-0F4CD93359E8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -25,18 +19,6 @@ Global
 		{358F3835-26C6-4116-A4C5-0F4CD93359E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{358F3835-26C6-4116-A4C5-0F4CD93359E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{358F3835-26C6-4116-A4C5-0F4CD93359E8}.Release|Any CPU.Build.0 = Release|Any CPU
-		{90E479F8-DC9E-4F00-A93B-03CC22EC5F28}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{90E479F8-DC9E-4F00-A93B-03CC22EC5F28}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{90E479F8-DC9E-4F00-A93B-03CC22EC5F28}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{90E479F8-DC9E-4F00-A93B-03CC22EC5F28}.Release|Any CPU.Build.0 = Release|Any CPU
-		{9C42FB24-88C2-40D5-B73C-91272D48D57A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9C42FB24-88C2-40D5-B73C-91272D48D57A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9C42FB24-88C2-40D5-B73C-91272D48D57A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9C42FB24-88C2-40D5-B73C-91272D48D57A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D81768B4-197B-4A05-95E9-0475EDCC46B6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D81768B4-197B-4A05-95E9-0475EDCC46B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D81768B4-197B-4A05-95E9-0475EDCC46B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D81768B4-197B-4A05-95E9-0475EDCC46B6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -44,9 +26,6 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{FFF5A561-9A82-432D-B7D8-279D2229985B} = {75E6F2D4-21EB-4E48-939A-8446B7123406}
 		{358F3835-26C6-4116-A4C5-0F4CD93359E8} = {FFF5A561-9A82-432D-B7D8-279D2229985B}
-		{90E479F8-DC9E-4F00-A93B-03CC22EC5F28} = {FFF5A561-9A82-432D-B7D8-279D2229985B}
-		{9C42FB24-88C2-40D5-B73C-91272D48D57A} = {FFF5A561-9A82-432D-B7D8-279D2229985B}
-		{D81768B4-197B-4A05-95E9-0475EDCC46B6} = {FFF5A561-9A82-432D-B7D8-279D2229985B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {50CD3E4A-FA01-47DE-A3F5-E2723DC0A88F}
