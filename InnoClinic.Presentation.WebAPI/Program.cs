@@ -1,6 +1,11 @@
-
-using MongoDB.Bson;
-using MongoDB.Driver;
+using Microsoft.EntityFrameworkCore;
+using Serilog.Events;
+using Serilog;
+using System.Reflection;
+using Serilog.Sinks.SystemConsole.Themes;
+using InnoClinic.Infrastructure.Persistence.Data;
+using InnoClinic.Infrastructure.Persistence.SeedsData;
+using Microsoft.AspNetCore.Identity;
 
 namespace InnoClinic.Presentation.WebAPI
 {
@@ -11,14 +16,77 @@ namespace InnoClinic.Presentation.WebAPI
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-
-            builder.Services.AddSingleton(new MongoClient("mongodb://localhost:27017").GetDatabase("test")); 
-            builder.Services.AddControllers();
+            builder.Services.AddControllersWithViews();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
+            var migrationsAssembly = typeof(Program).GetTypeInfo().Assembly.GetName().Name;
+
+            builder.Services.AddDbContext<ApplicationDbContext>(options =>
+                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"), opt =>
+                {
+                    opt.MigrationsAssembly(migrationsAssembly);
+                }));
+
+            builder.Services.AddIdentity<IdentityUser, IdentityRole>()
+                .AddEntityFrameworkStores<ApplicationDbContext>();
+
+            builder.Services.AddIdentityServer()
+                .AddAspNetIdentity<IdentityUser>()
+                .AddConfigurationStore(options =>
+                {
+                    options.ConfigureDbContext = contextBuilder =>
+                    {
+                        contextBuilder.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"), opt =>
+                        {
+                            opt.MigrationsAssembly(migrationsAssembly);
+                        });
+                    };
+                })
+                .AddOperationalStore(options =>
+                {
+                    options.ConfigureDbContext = contextBuilder =>
+                    {
+                        contextBuilder.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"), opt =>
+                        {
+                            opt.MigrationsAssembly(migrationsAssembly);
+                        });
+                    };
+                })
+                .AddDeveloperSigningCredential();
+
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowAll",
+                    builder =>
+                    {
+                        builder
+                        .AllowAnyOrigin()
+                        .AllowAnyMethod()
+                        .AllowAnyHeader();
+                    });
+            });
+
+            Log.Logger = new LoggerConfiguration()
+                            .MinimumLevel.Debug()
+                            .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
+                            .MinimumLevel.Override("Microsoft.Hosting.Lifetime", LogEventLevel.Information)
+                            .MinimumLevel.Override("System", LogEventLevel.Warning)
+                            .MinimumLevel.Override("Microsoft.AspNetCore.Authentication", LogEventLevel.Information)
+                            .Enrich.FromLogContext()
+                            .WriteTo.Console(outputTemplate: "[{Timestamp:HH:mm:ss} {Level}] {SourceContext}{NewLine}{Message:lj}{NewLine}{Exception}{NewLine}", theme: AnsiConsoleTheme.Code)
+                            .CreateLogger();
+
             var app = builder.Build();
+
+            if (app.Environment.IsDevelopment())
+            {
+                Log.Information("Seeding database...");
+                var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+                SeedData.EnsureSeedData(connectionString);
+                Log.Information("Done seeding database.");
+            }
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
@@ -27,28 +95,19 @@ namespace InnoClinic.Presentation.WebAPI
                 app.UseSwaggerUI();
             }
 
-            app.MapGet("/", async (IMongoDatabase db) =>
-            {
-                var collection = db.GetCollection<BsonDocument>("users");
-
-                if (await collection.CountDocumentsAsync("{}") == 0)
-                {
-                    await collection.InsertManyAsync(new List<BsonDocument>
-                    {
-                        new BsonDocument { { "Name", "Tom" } }
-                    
-                    });
-                }
-                var users = await collection.Find("{}").ToListAsync();
-                return users.ToJson();
-            });
+            app.UseStaticFiles();
 
             app.UseHttpsRedirection();
 
+            app.UseCors("AllowAll");
+
+            app.UseIdentityServer();
+
             app.UseAuthorization();
 
-
             app.MapControllers();
+
+            app.MapDefaultControllerRoute();
 
             app.Run();
         }
